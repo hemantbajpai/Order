@@ -15,14 +15,27 @@ class MyOrderSpec extends Specification {
     def cleanup() {
     }
 
-    void "MyOrder should have a order"() {
+    void "MyOrder should have a user"() {
         when:
-            MyOrder order = new MyOrder(dateCreated: new Date(), lastUpdated: new Date())
+            MyOrder order = new MyOrder(grandTotal: 5, dateCreated: new Date(), lastUpdated: new Date())
             order.save(flush: true)
         then:
             !order.validate()
         when:
             order.user = new User()
+            order.save(flush:true)
+        then:
+            order.validate()
+    }
+
+    void "grand total should not be negative"() {
+        when:
+            MyOrder order = new MyOrder(grandTotal: -1, user: new User(), dateCreated: new Date(), lastUpdated: new Date())
+            order.save(flush: true)
+        then:
+            !order.validate()
+        when:
+            order.grandTotal = 5
             order.save(flush:true)
         then:
             order.validate()

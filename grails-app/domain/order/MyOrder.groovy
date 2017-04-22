@@ -11,6 +11,7 @@ class MyOrder {
     static hasMany = [items: Item]
 
     static constraints = {
+        grandTotal min: 0
         datePurchased nullable: true
     }
 }
