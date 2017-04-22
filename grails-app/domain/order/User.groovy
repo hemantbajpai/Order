@@ -53,7 +53,7 @@ class User implements Serializable {
 	static constraints = {
 		password blank: false, password: true
 		username blank: false, unique: true
-		//creditCard(creditCard: true)
+		creditCard(creditCard: true)
 		firstName blank: false
 		lastName blank: false
 		addressLine1 blank: false
