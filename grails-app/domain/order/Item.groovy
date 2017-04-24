@@ -2,7 +2,8 @@ package order
 
 class Item {
 
-    Object objItem
+    String name
+    int price
     String size
     int quantity
 

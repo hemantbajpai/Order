@@ -30,6 +30,15 @@ class User implements Serializable {
 
 	static hasMany = [orders: MyOrder]
 
+	MyOrder getCurrentOrder() {
+		MyOrder order
+		orders.each {
+			if(it.currentOrder)
+				order =  it
+		}
+		order
+	}
+
 	Set<Role> getAuthorities() {
 		UserRole.findAllByUser(this)*.role
 	}
