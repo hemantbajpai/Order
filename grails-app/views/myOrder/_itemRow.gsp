@@ -4,10 +4,13 @@
 <div class="container">
 
     <g:set var="item" value="${bean}"/>
+    <g:form controller="MyOrder" action="changeQuantity" params="[id: item.id]">
     <tr>
-        <td class="col-sm-1 col-xs-2">${item.name}</td>
-        <td class="col-sm-1 col-xs-2">${item.quantity}</td>
-        <td class="col-sm-1 col-xs-2">${item.size}</td>
-        <td class="col-sm-1 col-xs-2">${item.price}</td>
+        <td>${item.name}</td>
+        <td><g:select name="quantity" from="${1..10}" value="${item.quantity}"/></td>
+        <td><g:select name="size" from="${["small","medium","large"]}" value="${item.size}"/></td>
+        <td>${item.price}</td>
+        <td><g:actionSubmit value="Delete" action="deleteItem"/></td>
     </tr>
+    </g:form>
 </div>
