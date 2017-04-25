@@ -66,6 +66,7 @@ class User implements Serializable {
 		firstName blank: false
 		lastName blank: false
 		addressLine1 blank: false
+		addressLine2 blank: false
 		city blank: false
 		state blank: false
 		zipcode blank: false

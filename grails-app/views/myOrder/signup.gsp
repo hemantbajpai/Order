@@ -7,6 +7,14 @@
     </head>
     <body>
 
+    <g:hasErrors bean="${user}">
+        <ul>
+            <g:eachError var="err" bean="${user}">
+                <p style="color: red">${err.getField()} is not correct</p>
+            </g:eachError>
+        </ul>
+    </g:hasErrors>
+
     <g:form controller="MyOrder">
         <h2>Your Information</h2> <br>
         <table>
@@ -15,7 +23,7 @@
                     <label>Username</label>
                 </td>
                 <td>
-                    <g:textField name="username"  />
+                        <g:textField name="username"  value="${fieldValue(bean:user,field:'username')}"/>
                 </td>
             </tr>
             <tr>
@@ -23,7 +31,7 @@
                     <label>Password</label>
                 </td>
                 <td>
-                    <g:field type="password" name="password"  />
+                        <g:field type="password" name="password" value="${fieldValue(bean:user,field:'password')}"/>
                 </td>
             </tr>
             <tr>
@@ -31,7 +39,7 @@
                     <label>First Name</label>
                 </td>
                 <td>
-                    <g:textField name="firstName" />
+                        <g:textField name="firstName"  value="${fieldValue(bean:user,field:'firstName')}"/>
                 </td>
             </tr>
             <tr>
@@ -39,7 +47,7 @@
                     <label>Last Name</label>
                 </td>
                 <td>
-                    <g:textField name="lastName" />
+                        <g:textField name="lastName"  value="${fieldValue(bean:user,field:'lastName')}"/>
                 </td>
             </tr>
             <tr>
@@ -47,7 +55,7 @@
                     <label>Address line 1</label>
                 </td>
                 <td>
-                     <g:textField name="addressLine1" />
+                        <g:textField name="addressLine1" value="${fieldValue(bean:user,field:'addressLine1')}"/>
                 </td>
             </tr>
             <tr>
@@ -55,7 +63,7 @@
                     <label>Address line 2</label>
                 </td>
                 <td>
-                    <g:textField name="addressLine2"  />
+                        <g:textField name="addressLine2"   value="${fieldValue(bean:user,field:'addressLine2')}"/>
                 </td>
             </tr>
             <tr>
@@ -63,7 +71,7 @@
                     <label>City</label>
                 </td>
                 <td>
-                    <g:textField name="city" />
+                        <g:textField name="city"  value="${fieldValue(bean:user,field:'city')}"/>
                 </td>
             </tr>
             <tr>
@@ -71,7 +79,7 @@
                     <label>State</label>
                 </td>
                 <td>
-                    <g:textField name="state" />
+                        <g:textField name="state"  value="${fieldValue(bean:user,field:'state')}"/>
                 </td>
             </tr>
             <tr>
@@ -79,7 +87,7 @@
                     <label>Zipcode</label>
                 </td>
                 <td>
-                    <g:textField name="zipcode" />
+                        <g:textField name="zipcode"   value="${fieldValue(bean:user,field:'zipcode')}"/>
                 </td>
             </tr>
         </table>
@@ -91,7 +99,7 @@
                     <label>Credit card no.</label>
                 </td>
                 <td>
-                    <g:textField name="creditCard"  />
+                        <g:textField name="creditCard"    value="${fieldValue(bean:user,field:'creditCard')}"/>
                 </td>
             </tr>
             <tr>
@@ -99,7 +107,7 @@
                     <label>Expiry Date</label>
                 </td>
                 <td>
-                    <g:field type="date" name="expiryDate" /> <br>
+                        <g:field type="date" name="expiryDate"  value="${fieldValue(bean:user,field:'expiryDate')}"/>
                 </td>
             </tr>
         </table>

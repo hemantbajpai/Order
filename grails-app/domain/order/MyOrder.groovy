@@ -1,7 +1,7 @@
 package order
 
 class MyOrder {
-
+    
     int grandTotal
     Date dateCreated
     Date lastUpdated

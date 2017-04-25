@@ -14,6 +14,7 @@
             <th class="col-sm-1 col-xs-2">Quantiy</th>
             <th class="col-sm-1 col-xs-2">Size</th>
             <th class="col-sm-1 col-xs-2">Price</th>
+            <th class="col-sm-1 col-xs-2">Delete Item</th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +29,7 @@
     <hr>
     <g:form controller="MyOrder" params="[id: myOrder.id]">
         <h2>Your Information</h2> <br>
-        <sec:ifAnyGranted roles="ROLE_USER">
+        <sec:ifNotGranted roles="ROLE_ANONYMOUS">
             <table>
                 <tr>
                     <td>
@@ -87,7 +88,7 @@
                     </td>
                 </tr>
             </table>
-        </sec:ifAnyGranted>
+        </sec:ifNotGranted>
         <sec:ifAnyGranted roles="ROLE_ANONYMOUS">
             <table>
                 <tr>
@@ -150,7 +151,7 @@
         </sec:ifAnyGranted>
         <hr>
         <h2>Payment Information</h2> <br>
-        <sec:ifAnyGranted roles="ROLE_USER">
+        <sec:ifNotGranted roles="ROLE_ANONYMOUS">
             <table>
                 <tr>
                     <td>
@@ -165,11 +166,11 @@
                         <label>Expiry Date</label>
                     </td>
                     <td>
-                        <g:textField name="expiryDate" value="${myOrder.user.expiryDate}" /> <br>
+                        <g:field type="date" name="expiryDate" value="${myOrder.user.expiryDate}" /> <br>
                     </td>
                 </tr>
             </table>
-        </sec:ifAnyGranted>
+        </sec:ifNotGranted>
         <sec:ifAnyGranted roles="ROLE_ANONYMOUS">
             <table>
                 <tr>
@@ -185,7 +186,7 @@
                         <label>Expiry Date</label>
                     </td>
                     <td>
-                        <g:textField name="expiryDate"  /> <br>
+                        <g:field type="date" name="expiryDate"  /> <br>
                     </td>
                 </tr>
             </table>

@@ -6,35 +6,43 @@ import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
-@Secured([Role.ROLE_ADMIN])
+@Secured('permitAll')
 class MyOrderController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def springSecurityService
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
+    def changeQuantity() {
+        string str = params.input
+    }
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond MyOrder.list(params), model:[myOrderCount: MyOrder.count()]
     }
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
+    @Transactional
     def signup() {
         render view:'signup'
     }
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
+    @Transactional
     def createAccount() {
-        User user = new User(username: params.username, password: params.password, firstName: params.firstName, lastName: params.lastName, addressLine1: params.addressLine1, addressLine2: params.addressLine2, city: params.city, state: params.state, zipcode: params.zipcode, creditCard: params.creditCard, expiryDate: Date.parse("yyyy-MM-dd", params.expiryDate))
-        user.save(flush: true, failOnError:true)
+        User user = new User(username: params.username, password: params.password, firstName: params.firstName, lastName: params.lastName, addressLine1: params.addressLine1, addressLine2: params.addressLine2, city: params.city, state: params.state, zipcode: params.zipcode, creditCard: params.creditCard, expiryDate: params.expiryDate? Date.parse("yyyy-MM-dd", params.expiryDate):null, enabled: true)
 
-        Role userRole = Role.findByAuthority(Role.ROLE_USER)
-        UserRole.create(user, userRole).save(flush:true, failOnError:true)
+        if (user.validate()) {
+            user.save(flush: true, failOnError: true)
 
+            Role userRole = Role.findByAuthority(Role.ROLE_USER)
+            //UserRole.create(user, userRole)
+            render view: 'createAccount'
+        }
+        else {
+            render view:"signup", model:[user: user]
+        }
     }
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
     def addToOrder() {
         User user = springSecurityService.getCurrentUser()
 
@@ -59,7 +67,6 @@ class MyOrderController {
         render view:'show', model:[myOrder: order]
     }
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
     def myCurrentOrder() {
         User user = springSecurityService.getCurrentUser()
 
@@ -79,13 +86,16 @@ class MyOrderController {
         render view:'show', model:[myOrder: order]
     }
 
-    @Secured([Role.ROLE_ADMIN, Role.ROLE_USER, Role.ROLE_ANONYMOUS])
     def submitOrder() {
         MyOrder order = MyOrder.get(params.id)
+
         order.datePurchased = new Date()
         order.currentOrder = false
-        order.save(flush:true, failOnError:true)
-        render view:'confirmation'
+        order.save(flush: true, failOnError: true)
+
+
+        render view: 'confirmation'
+
     }
 
     def show(MyOrder myOrder) {
