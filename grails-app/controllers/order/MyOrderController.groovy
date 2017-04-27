@@ -89,13 +89,25 @@ class MyOrderController {
     def submitOrder() {
         MyOrder order = MyOrder.get(params.id)
 
-        order.datePurchased = new Date()
-        order.currentOrder = false
-        order.save(flush: true, failOnError: true)
-
-
-        render view: 'confirmation'
-
+        order.user.firstName = params.firstName
+        order.user.lastName = params.lastName
+        order.user.addressLine1 = params.addressLine1
+        order.user.addressLine2 = params.addressLine2
+        order.user.city = params.city
+        order.user.state = params.state
+        order.user.zipcode = params.zipcode
+        order.user.creditCard = params.creditCard
+        order.user.expiryDate = params.expiryDate ? Date.parse("yyyy-MM-dd", params.expiryDate) : null
+        order.user.save(flush:true)
+        if (order.validate()) {
+            order.datePurchased = new Date()
+            order.currentOrder = false
+            order.save(flush: true, failOnError: true)
+            render view: 'confirmation'
+        }
+        else {
+            render view:'show', model:[myOrder: order]
+        }
     }
 
     def show(MyOrder myOrder) {

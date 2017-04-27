@@ -24,6 +24,14 @@
         </tbody>
     </table>
 
+    <g:hasErrors bean="${myOrder}">
+        <ul>
+            <g:eachError var="err" bean="${myOrder}">
+                <p style="color: red">${err.getField()} is not correct</p>
+            </g:eachError>
+        </ul>
+    </g:hasErrors>
+
     <h2><b>Total Price:</b> $ ${myOrder.getTotal()} </h2>
     <br>
     <hr>
