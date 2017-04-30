@@ -17,7 +17,7 @@ class ItemSpec extends Specification {
 
     void "item should hava 1 quantity"() {
         when:
-            Item item = new Item(objItem: new Object(), size: "small", quantity: 0, order: new MyOrder())
+            Item item = new Item(name:"name", price: 5, size: "small", quantity: 0, order: new MyOrder())
             item.save(flush: true)
         then:
             !item.validate()
@@ -30,7 +30,7 @@ class ItemSpec extends Specification {
 
     void "item size should be small, medium or large" () {
         when:
-            Item item = new Item(objItem: new Object(), size: "random", quantity: 1, order: new MyOrder())
+            Item item = new Item(name:"name", price: 5,  size: "random", quantity: 1, order: new MyOrder())
             item.save(flush: true)
         then:
             !item.validate()
@@ -53,7 +53,7 @@ class ItemSpec extends Specification {
 
     void "item should belong to order" () {
         when:
-            Item item = new Item(objItem: new Object(), size: "small", quantity: 1)
+            Item item = new Item(name:"name", price: 5, size: "small", quantity: 1)
             item.save(flush: true)
         then:
             !item.validate()

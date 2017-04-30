@@ -17,12 +17,6 @@ class MyOrderController {
         string str = params.input
     }
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond MyOrder.list(params), model:[myOrderCount: MyOrder.count()]
-    }
-
-    @Transactional
     def signup() {
         render view:'signup'
     }
@@ -107,98 +101,6 @@ class MyOrderController {
         }
         else {
             render view:'show', model:[myOrder: order]
-        }
-    }
-
-    def show(MyOrder myOrder) {
-        respond myOrder
-    }
-
-    def create() {
-        respond new MyOrder(params)
-    }
-
-    @Transactional
-    def save(MyOrder myOrder) {
-        if (myOrder == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (myOrder.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond myOrder.errors, view:'create'
-            return
-        }
-
-        myOrder.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'myOrder.label', default: 'MyOrder'), myOrder.id])
-                redirect myOrder
-            }
-            '*' { respond myOrder, [status: CREATED] }
-        }
-    }
-
-    def edit(MyOrder myOrder) {
-        respond myOrder
-    }
-
-    @Transactional
-    def update(MyOrder myOrder) {
-        if (myOrder == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (myOrder.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond myOrder.errors, view:'edit'
-            return
-        }
-
-        myOrder.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'myOrder.label', default: 'MyOrder'), myOrder.id])
-                redirect myOrder
-            }
-            '*'{ respond myOrder, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(MyOrder myOrder) {
-
-        if (myOrder == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        myOrder.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'myOrder.label', default: 'MyOrder'), myOrder.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'myOrder.label', default: 'MyOrder'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
         }
     }
 }
