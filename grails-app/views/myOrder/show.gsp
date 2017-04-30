@@ -4,6 +4,8 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'myOrder.label', default: 'MyOrder')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
+        <asset:javascript src="application.js"></asset:javascript>
+        <asset:javascript src="order.js"></asset:javascript>
     </head>
     <body>
 
@@ -201,6 +203,7 @@
         </sec:ifAnyGranted>
         <g:actionSubmit style="float: right" value="Submit Order" action="submitOrder"/>
     </g:form>
+
     <br>
     </body>
 </html>

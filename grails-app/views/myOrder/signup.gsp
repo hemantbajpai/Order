@@ -23,7 +23,9 @@
                     <label>Username</label>
                 </td>
                 <td>
+                    <div class='value ${hasErrors(bean:user,field:'username','errors')}'>
                         <g:textField name="username"  value="${fieldValue(bean:user,field:'username')}"/>
+                    </div>
                 </td>
             </tr>
             <tr>

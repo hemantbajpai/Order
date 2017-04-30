@@ -13,8 +13,17 @@ class MyOrderController {
 
     def springSecurityService
 
-    def changeQuantity() {
-        string str = params.input
+    def show(MyOrder myOrder) {
+        respond myOrder
+    }
+
+    def changeQuantity(Item item, Integer qty) {
+        //needs to be implemented
+    }
+
+    def orderhistory() {
+        User user = springSecurityService.getCurrentUser()
+        render view:"orderhistory", model:[orders: user.orders]
     }
 
     def signup() {
@@ -83,6 +92,16 @@ class MyOrderController {
     def submitOrder() {
         MyOrder order = MyOrder.get(params.id)
 
+        if(!order.currentOrder){
+            MyOrder newOrder = new MyOrder(dateCreated: new Date(), datePurchased: new Date(), lastUpdated: new Date(), currentOrder: false, items: [], user: order.user, grandTotal: 0)
+            order.user.orders << newOrder
+            order.items.each { item ->
+                Item newItem = new Item(name: item.name, price: item.price, size: item.size, quantity: item.quantity, order: newOrder)
+                newOrder.items << newItem
+            }
+            order.user.save(flush:true, failOnError:true)
+            order = newOrder
+        }
         order.user.firstName = params.firstName
         order.user.lastName = params.lastName
         order.user.addressLine1 = params.addressLine1
