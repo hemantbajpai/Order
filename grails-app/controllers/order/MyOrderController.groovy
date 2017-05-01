@@ -1,5 +1,6 @@
 package order
 
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 import static org.springframework.http.HttpStatus.*
@@ -17,8 +18,39 @@ class MyOrderController {
         respond myOrder
     }
 
+    def deleteItem(Item item) {
+        item.showItem = false
+        item.save(flush: true, failOnError: true)
+        def res = ['object':item, 'price':item.order.getTotal()]
+        render res as JSON
+    }
+
+    def changeSize(Item item, String size) {
+        item.size = size
+        if(item.size == "small")
+            item.currentPrice = item.price*0.75
+        else if(item.size == "large")
+            item.currentPrice = item.price*1.25
+        else
+            item.currentPrice = item.price
+        item.currentPrice = item.currentPrice*item.quantity
+        item.save(flush: true, failOnError: true)
+        def res = ['object':item, 'price':item.order.getTotal()]
+        render res as JSON
+    }
+
     def changeQuantity(Item item, Integer qty) {
-        //needs to be implemented
+        if(item.size == "small")
+            item.currentPrice = item.price*0.75
+        else if(item.size == "large")
+            item.currentPrice = item.price*1.25
+        else
+            item.currentPrice = item.price
+        item.quantity = qty
+        item.currentPrice = item.currentPrice*qty
+        item.save(flush: true, failOnError: true)
+        def res = ['object':item, 'price':item.order.getTotal()]
+        render res as JSON
     }
 
     def orderhistory() {
@@ -62,9 +94,9 @@ class MyOrderController {
             user.save(flush:true, failOnError:true)
         }
 
-        Item item = new Item(name: params.name, price: params.price, size: "medium", quantity: 1, order: order)
+        Item item = new Item(name: params.name, price: params.price, currentPrice: params.price, size: "medium", quantity: 1, order: order, showItem: true)
         item.save(flush:true, failOnError:true)
-        order.items << item
+        order.addToItems(item)
         order.save(flush:true, failOnError:true)
 
         render view:'show', model:[myOrder: order]
@@ -92,16 +124,6 @@ class MyOrderController {
     def submitOrder() {
         MyOrder order = MyOrder.get(params.id)
 
-        if(!order.currentOrder){
-            MyOrder newOrder = new MyOrder(dateCreated: new Date(), datePurchased: new Date(), lastUpdated: new Date(), currentOrder: false, items: [], user: order.user, grandTotal: 0)
-            order.user.orders << newOrder
-            order.items.each { item ->
-                Item newItem = new Item(name: item.name, price: item.price, size: item.size, quantity: item.quantity, order: newOrder)
-                newOrder.items << newItem
-            }
-            order.user.save(flush:true, failOnError:true)
-            order = newOrder
-        }
         order.user.firstName = params.firstName
         order.user.lastName = params.lastName
         order.user.addressLine1 = params.addressLine1

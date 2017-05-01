@@ -14,7 +14,9 @@ class MyOrder {
     int getTotal() {
         int total = 0
         items.each {
-            total += it.price
+            if(it.showItem) {
+                total += it.currentPrice
+            }
         }
         return total
     }

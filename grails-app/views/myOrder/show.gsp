@@ -16,12 +16,16 @@
             <th class="col-sm-1 col-xs-2">Quantiy</th>
             <th class="col-sm-1 col-xs-2">Size</th>
             <th class="col-sm-1 col-xs-2">Price</th>
-            <th class="col-sm-1 col-xs-2">Delete Item</th>
+            <g:if test="${myOrder.currentOrder == true}">
+                <th class="col-sm-1 col-xs-2">Delete Item</th>
+            </g:if>
         </tr>
         </thead>
         <tbody>
         <g:each var="item" in="${myOrder.items}">
-            <g:render template="itemRow" model="[bean:item]" />
+            <g:if test="${item.showItem == true}">
+                <g:render template="itemRow" model="[bean:item]" />
+            </g:if>
         </g:each>
         </tbody>
     </table>
@@ -34,7 +38,9 @@
         </ul>
     </g:hasErrors>
 
-    <h2><b>Total Price:</b> $ ${myOrder.getTotal()} </h2>
+    <h2><b>Total Price:</b> $ <label id="price">${myOrder.getTotal()}</label> </h2>
+
+    <g:if test="${myOrder.currentOrder == true}">
     <br>
     <hr>
     <g:form controller="MyOrder" params="[id: myOrder.id]">
@@ -205,5 +211,6 @@
     </g:form>
 
     <br>
+    </g:if>
     </body>
 </html>
