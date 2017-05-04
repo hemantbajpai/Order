@@ -17,7 +17,7 @@ class ItemSpec extends Specification {
 
     void "item should hava 1 quantity"() {
         when:
-            Item item = new Item(name:"name", price: 5, size: "small", quantity: 0, order: new MyOrder())
+            Item item = new Item(name:"name", price: 5, currentPrice: 5, size: "small", quantity: 0, order: new MyOrder(), showItem: true)
             item.save(flush: true)
         then:
             !item.validate()
@@ -30,7 +30,7 @@ class ItemSpec extends Specification {
 
     void "item size should be small, medium or large" () {
         when:
-            Item item = new Item(name:"name", price: 5,  size: "random", quantity: 1, order: new MyOrder())
+            Item item = new Item(name:"name", price: 5,  currentPrice: 5, size: "random", quantity: 1, order: new MyOrder(), showItem: true)
             item.save(flush: true)
         then:
             !item.validate()
@@ -53,12 +53,38 @@ class ItemSpec extends Specification {
 
     void "item should belong to order" () {
         when:
-            Item item = new Item(name:"name", price: 5, size: "small", quantity: 1)
+            Item item = new Item(name:"name", price: 5, currentPrice: 5, size: "small", quantity: 1, showItem: true)
             item.save(flush: true)
         then:
             !item.validate()
         when:
             item.order = new MyOrder()
+            item.save(flush: true)
+        then:
+            item.validate()
+    }
+
+    void "item should have positive price" () {
+        when:
+            Item item = new Item(name:"name", price: -5, currentPrice: 5, size: "small", quantity: 1, showItem: true, order: new MyOrder())
+            item.save(flush: true)
+        then:
+            !item.validate()
+        when:
+            item.price = 5
+            item.save(flush: true)
+        then:
+            item.validate()
+    }
+
+    void "item should have positive currentPrice" () {
+        when:
+            Item item = new Item(name:"name", price: 5, currentPrice: -5, size: "small", quantity: 1, showItem: true, order: new MyOrder())
+            item.save(flush: true)
+        then:
+            !item.validate()
+        when:
+            item.currentPrice = 5
             item.save(flush: true)
         then:
             item.validate()

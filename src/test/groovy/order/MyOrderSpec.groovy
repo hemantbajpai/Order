@@ -40,4 +40,14 @@ class MyOrderSpec extends Specification {
         then:
             order.validate()
     }
+
+    void "getting total of an order" () {
+        when:
+            MyOrder order = new MyOrder(grandTotal: 1, user: new User(), dateCreated: new Date(), lastUpdated: new Date(), items: [])
+            Item item = new Item(currentPrice: 5, order: order, showItem: true)
+            order.items << item
+            order.save(flush: true)
+        then:
+            order.getTotal() == 5
+    }
 }
