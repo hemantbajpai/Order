@@ -7,53 +7,47 @@
     </head>
     <body>
         <table>
-            <thead>
+
             <tr>
-                <th>
+                <th class="col-xs-3">
                     <label>Date Created</label>
                 </th>
-                <th>
+                <th class="col-xs-3">
                     <label>Last Updated</label>
                 </th>
-                <th>
+                <th class="col-xs-3">
                     <label>Date Purchased</label>
                 </th>
-                <th>
+                <th class="col-xs-3">
                     <label>Total Amount</label>
                 </th>
             </tr>
             <g:each var="order" in="${orders}">
 
                 <tr>
-                    <td>
+                    <td class="col-xs-3">
                         <a href="/myorder/show/${order.id}">
                             <g:formatDate format="MM-dd-yyyy" date="${order.dateCreated}" />
                         </a>
                     </td>
-                    <td>
-                        <a href="/myorder/show/${order.id}">
+                    <td class="col-xs-3">
                             <g:formatDate format="MM-dd-yyyy" date="${order.lastUpdated}" />
-                        </a>
                     </td>
-                    <td>
-                        <a href="/myorder/show/${order.id}">
+                    <td class="col-xs-3">
                             <g:if test="${order.currentOrder == false}">
                                 <g:formatDate format="MM-dd-yyyy" date="${order.lastUpdated}" />
                             </g:if>
                             <g:else>
                                 <label>Still Pending</label>
                             </g:else>
-                        </a>
                     </td>
-                    <td>
-                        <a href="/myorder/show/${order.id}">
+                    <td class="col-xs-3">
                             <label>${order.getTotal()}</label>
-                        </a>
                     </td>
                 </tr>
 
             </g:each>
-            </thead>
+
         </table>
     </body>
 </html>

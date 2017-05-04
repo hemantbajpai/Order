@@ -96,6 +96,7 @@ class MyOrderController {
 
         Item item = new Item(name: params.name, price: params.price, currentPrice: params.price, size: "medium", quantity: 1, order: order, showItem: true)
         item.save(flush:true, failOnError:true)
+        order.lastUpdated = new Date()
         order.addToItems(item)
         order.save(flush:true, failOnError:true)
 

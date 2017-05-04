@@ -12,12 +12,12 @@
     <table>
         <thead>
         <tr>
-            <th class="col-sm-1 col-xs-2">Name</th>
-            <th class="col-sm-1 col-xs-2">Quantiy</th>
-            <th class="col-sm-1 col-xs-2">Size</th>
-            <th class="col-sm-1 col-xs-2">Price</th>
+            <th>Name</th>
+            <th>Quantiy</th>
+            <th>Size</th>
+            <th>Price</th>
             <g:if test="${myOrder.currentOrder == true}">
-                <th class="col-sm-1 col-xs-2">Delete Item</th>
+                <th>Delete Item</th>
             </g:if>
         </tr>
         </thead>
