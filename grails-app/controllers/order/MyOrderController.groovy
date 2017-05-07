@@ -69,7 +69,7 @@ class MyOrderController {
         if (user.validate()) {
             user.save(flush: true, failOnError: true)
 
-            Role userRole = Role.findByAuthority(Role.ROLE_USER)
+            //Role userRole = Role.findByAuthority(Role.ROLE_USER)
             //UserRole.create(user, userRole)
             render view: 'createAccount'
         }
